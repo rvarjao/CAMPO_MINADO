@@ -221,16 +221,19 @@ class CampoMinado():
         if self.posicoesDasMinasSinalizadas.__contains__(Point(x,y)): return
 
         if valor == self.str_mina:
-            print("Você pisou numa bomba!")
+            print("Você pisou numa mina!")
             self.statusDoJogo = self.statusJogoJogadorPerdeu
             self.revelaMinas()
+            return
 
         elif valor == 0:
             self.limparRegiaoAPartirDaPosicao(x, y)
+
         else: #revela o valor
             self.campoVisivel[x][y] = valor
 
         self.imprimeCampoVisivel()
+        self.atualizaStatusDoJogo()
 
     def atualizaStatusDoJogo(self):
         # todas as minas sinalizadas devem coincidir com as posicoes das minas
@@ -238,6 +241,8 @@ class CampoMinado():
 
         print("posicoesDasMinas: ",self.posicoesDasMinas)
         print ("posicoesDasMinasSinalizadas: ", self.posicoesDasMinasSinalizadas)
+
+        #ganha-se tambem se abriu todas as posicoes com excessao das minas
 
         if len(self.posicoesDasMinasSinalizadas) == len(self.posicoesDasMinas):#ja chutou todas, deve-se verificar se ganhou
 
@@ -258,9 +263,29 @@ class CampoMinado():
                     self.statusDoJogo = self.statusJogoJogadorPerdeu #errou ao menos uma
                     return
 
-
+        elif self.todas_posicoes_abertas_corretamente():
+            self.statusDoJogo = self.statusJogoJogadorVenceu
+            return
         else:
             self.statusDoJogo = self.statusJogoEmAndamento
+
+    #verifica se usuario ja abriu todas as posicoes com excessao das minas
+    def todas_posicoes_abertas_corretamente(self) -> bool:
+        print("chamando: self.todas_posicoes_abertas_corretamente")
+        #primeiro verifica se todas foram abertas
+        for x in range(0, self.colunas):
+            for y in range(0, self.linhas):
+                cell = self.campoVisivel[x][y]
+                print("cell:{}".format(cell))
+                if cell == self.str_celulaPadrao and self.campo[x][y] != self.str_mina: return False
+
+        #marca todas as minas
+            for position in self.posicoesDasMinas:
+                self.campoVisivel[position.x][position.y] = self.str_minaSinalizada
+        return True
+
+
+
 
     def revelaMinas(self):   #tem que sinalizar aquelas posicoes que foram marcadas erradas
         for mina in self.posicoesDasMinas:

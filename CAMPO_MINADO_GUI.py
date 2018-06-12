@@ -36,6 +36,7 @@ class CampoMinadoGUI(tk.Frame):
 
         self.pack ( )
 
+
         self.winfo_toplevel ( ).title ("Campo Minado - by Ricardo Varjão")
 
         #cria as imagens para serem utilizadas nos botoes
@@ -76,7 +77,12 @@ class CampoMinadoGUI(tk.Frame):
         self.botaoNovoJogo[ "text" ] = "Novo Jogo"
 
         self.labelMinasRestantes = tk.Label(self.frame_superior)
-        self.labelMinasRestantes["text"] = "0"
+        self.labelMinasRestantes["text"] = "minas\n{}".format(self.campoMinado.minasRestantes)
+        self.labelMinasRestantes.configure(font=("Helvetica Bold", 20))
+        #         fontSize = 20
+        #         self.labelPalavra.configure(font=("Helvetica", 40))
+        #         self.labelLetras.configure(font=("Helvetica", fontSize))
+        #         self.labelDica.configure(font=("Helvetica", fontSize))
 
         self.labelTimer = tk.Label (self.frame_superior)
         self.labelTimer[ "text" ] = "0"
@@ -150,24 +156,38 @@ class CampoMinadoGUI(tk.Frame):
         #nao entendi para quer serve wierdones
         self.menu_novo_jogo.choices.wierdones = Menu(self.menu_novo_jogo.choices)
 
-        self.menu_5x5 = Menu(self.menu_novo_jogo)
-        self.menu_5x5.add_command(label="5 minas", command=lambda : self.acao_menu_novo_jogo(5,5))
-        self.menu_5x5.add_command(label="10 minas", command=lambda : self.acao_menu_novo_jogo(5,10))
-        self.menu_5x5.add_command(label="15 minas", command=lambda : self.acao_menu_novo_jogo(5,15))
+        self.menu_iniciante = Menu(self.menu_novo_jogo)
+        self.menu_novo_jogo.add_command(label="Iniciante", command=lambda : self.acao_menu_novo_jogo(9,10))
 
-        self.menu_8x8 = Menu(self.menu_novo_jogo)
-        self.menu_8x8.add_command(label="10 minas", command=lambda : self.acao_menu_novo_jogo(8,10))
-        self.menu_8x8.add_command(label="20 minas", command=lambda : self.acao_menu_novo_jogo(8,20))
-        self.menu_8x8.add_command(label="40 minas", command=lambda : self.acao_menu_novo_jogo(8,40))
+        self.menu_intermediario = Menu(self.menu_novo_jogo)
+        self.menu_novo_jogo.add_command(label="Intermediário", command=lambda : self.acao_menu_novo_jogo(16,40))
 
-        self.menu_10x10 = Menu (self.menu_novo_jogo)
-        self.menu_10x10.add_command (label="5 minas", command=lambda : self.acao_menu_novo_jogo(10,5))
-        self.menu_10x10.add_command (label="20 minas", command=lambda : self.acao_menu_novo_jogo(10,20))
-        self.menu_10x10.add_command (label="50 minas", command=lambda : self.acao_menu_novo_jogo(10,50))
+        self.menu_avancado = Menu(self.menu_novo_jogo)
+        self.menu_novo_jogo.add_command(label="Avançado", command=lambda : self.acao_menu_novo_jogo(30, 99))
 
-        self.menu_novo_jogo.add_cascade(label="5x5", menu=self.menu_5x5)
-        self.menu_novo_jogo.add_cascade(label="8x8", menu=self.menu_8x8)
-        self.menu_novo_jogo.add_cascade(label="10x10", menu=self.menu_10x10)
+        # self.menu_novo_jogo.add_cascade(label="Iniciante", menu=self.menu_iniciante)
+        # self.menu_novo_jogo.add_cascade(label="Intermediário", menu=self.menu_intermediario)
+        # self.menu_novo_jogo.add_cascade(label="Avançado", menu=self.menu_avancado)
+
+
+        # self.menu_5x5 = Menu(self.menu_novo_jogo)
+        # self.menu_5x5.add_command(label="5 minas", command=lambda : self.acao_menu_novo_jogo(5,5))
+        # self.menu_5x5.add_command(label="10 minas", command=lambda : self.acao_menu_novo_jogo(5,10))
+        # self.menu_5x5.add_command(label="15 minas", command=lambda : self.acao_menu_novo_jogo(5,15))
+        #
+        # self.menu_8x8 = Menu(self.menu_novo_jogo)
+        # self.menu_8x8.add_command(label="10 minas", command=lambda : self.acao_menu_novo_jogo(8,10))
+        # self.menu_8x8.add_command(label="20 minas", command=lambda : self.acao_menu_novo_jogo(8,20))
+        # self.menu_8x8.add_command(label="40 minas", command=lambda : self.acao_menu_novo_jogo(8,40))
+        #
+        # self.menu_10x10 = Menu (self.menu_novo_jogo)
+        # self.menu_10x10.add_command (label="5 minas", command=lambda : self.acao_menu_novo_jogo(10,5))
+        # self.menu_10x10.add_command (label="20 minas", command=lambda : self.acao_menu_novo_jogo(10,20))
+        # self.menu_10x10.add_command (label="50 minas", command=lambda : self.acao_menu_novo_jogo(10,50))
+        #
+        # self.menu_novo_jogo.add_cascade(label="5x5", menu=self.menu_5x5)
+        # self.menu_novo_jogo.add_cascade(label="8x8", menu=self.menu_8x8)
+        # self.menu_novo_jogo.add_cascade(label="10x10", menu=self.menu_10x10)
 
 
         self.unused = Menu(self.menubar)
@@ -277,7 +297,8 @@ class CampoMinadoGUI(tk.Frame):
                 if RepresentsInt(imgNome[-1]):
                     self.botoes[x][y].config(state = "disabled")
 
-        self.labelMinasRestantes["text"] = "{}".format(self.campoMinado.minasRestantes)
+        # self.labelMinasRestantes["text"] = "{}".format(self.campoMinado.minasRestantes)
+        self.labelMinasRestantes["text"] = "minas\n{}".format(self.campoMinado.minasRestantes)
 
 
 
@@ -303,8 +324,10 @@ class CampoMinadoGUI(tk.Frame):
         # print("valor:{}  nome:{}".format(valorVisivel, nome))
         return nome
 
-colunas = 10
-minas = 5
+colunas = 9
+minas = 10
+# colunas = 3
+# minas = 1
 campoMinado = CampoMinado(colunas, minas)
 
 root = tk.Tk ()
